@@ -10,6 +10,10 @@ import time
 import csv
 
 import pyperclip
+from winotify import Notification, audio
+
+
+
 #---------------------------------------------------------------------
 
 URL_LIST_OF_SITES = [ 
@@ -123,6 +127,20 @@ button_to_print_maker_pdf.send_keys( Keys.ENTER )
 
 
 
-#input("Pressione ENTER para fechar o programa ok :) ...")
+
+toast = Notification(
+                    app_id      = "MTG Automation",
+                    title       = "Processo finalizado 🎉",
+                    msg         = "O PDF das cartas foi gerado com sucesso!",
+                    duration    = "short"
+                    )
+
+
+time.sleep( 6 )
+toast.set_audio( audio.Default , loop = False )
+toast.show()
+
+
+input("Pressione ENTER para fechar o programa ok :) ...")
 
 driver.quit()

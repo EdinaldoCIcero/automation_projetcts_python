@@ -30,6 +30,8 @@ Tudo isso é feito de forma automática, simulando interações reais do usuári
 - Google Chrome / ChromeDriver
 - pyperclip
 - ActionChains (Selenium)
+- winotify
+
 
 ---
 
@@ -55,7 +57,7 @@ pip install -r requirements.txt
 ## ▶️ Como executar
 
 ```bash
-python main_one.py
+python main.py
 ```
 
 O navegador será aberto automaticamente e o fluxo será executado.
@@ -82,4 +84,4 @@ Projeto criado para praticar:
 
 ## 🤝 Autor
 
-Projeto de estudo — ÁtomoGames : Studio Indie  
+Projeto de estudo — Edinaldo Cicero / ÁtomoGames
