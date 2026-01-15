@@ -31,6 +31,8 @@ Tudo isso é feito de forma automática, simulando interações reais do usuári
 - pyperclip
 - ActionChains (Selenium)
 - winotify
+- playwright
+
 
 
 ---

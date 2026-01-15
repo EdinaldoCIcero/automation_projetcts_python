@@ -1,3 +1,4 @@
 selenium
 pyperclip
 winotify
+playwright
