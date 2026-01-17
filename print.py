@@ -13,37 +13,30 @@ import time
 from libs.openCVReadImagens import OpenCVRead
 
 
-
 #----------------------------------------------------
-class ScreenSelector:
-    def __init__(self , path_out_img ):
-        self.root = tk.Tk()
 
+class ScreenSelector:
+    def __init__(self, parent, path_out_img, on_finish ):
+        self.on_finish = on_finish
         self.path_out_img = path_out_img
 
-        # tela inteira configuração de tela do app
+        self.root = tk.Toplevel(parent)
         self.root.attributes("-fullscreen", True)
         self.root.attributes("-alpha", 0.3)
         self.root.configure(bg="blue")
         self.root.overrideredirect(True)
 
-        #--------- usando o Cavnas para criar a area preta responsavel por sonseguir desenhar o retangulo 
-        self.canvas = tk.Canvas( self.root, cursor = "cross" , bg="black" )
+        self.canvas = tk.Canvas(self.root, cursor="cross", bg="black")
         self.canvas.pack(fill=tk.BOTH, expand=True)
-        #-----------------------------------------------------------------------------------------------
 
-        #--- Positions
-        self.start_x    = None
-        self.start_y    = None
-        self.rect       = None
+        self.start_x = None
+        self.start_y = None
+        self.rect   = None
 
-        # carregando as funç~eos de Draw do retangulo
         self.canvas.bind("<ButtonPress-1>", self.on_mouse_down)
         self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
         self.canvas.bind("<ButtonRelease-1>", self.on_mouse_up)
-
-        #------------------------
-        self.root.mainloop()
+        
 
     #-----------------------------------
 
@@ -78,13 +71,20 @@ class ScreenSelector:
         x2 = max( self.start_x , end_x )
         y2 = max( self.start_y , end_y )
 
-        self.root.destroy() # fechar o TK
+        #self.root .destroy() # fechar o TK
+        self.root.destroy()
 
+    # 🔥 AVISA QUE TERMINOU
+    
         # usando o pillow para criar a imagem do screenshot, sómente em windows
         screenshot = ImageGrab.grab( bbox = ( x1, y1, x2, y2 ) )
         screenshot.save( self.path_out_img )
 
+        
+        self.on_finish()
+
         print("Área salva com sucesso!")
+
 
 
 #-----------------------------------------------
@@ -104,7 +104,11 @@ class AppScreenShot( customtkinter.CTk ):
         
         self.read           = False
         self.new_img_shot   = ""
-        self.new_img_print  = ""
+        self.new_img_print  = "" 
+
+
+
+
 
     #-----------------------------------------------
     def setImgName( self , rand_name_out , name_img = "screen_shot_" , extetion_type = ".png"  ):
@@ -134,12 +138,17 @@ class AppScreenShot( customtkinter.CTk ):
         self.new_img_print = self.setImgName( rand_name_out = str( self.count_print_numb ) , name_img = self.new_user_folder + "_print_" )
         
         self.screenShotComplete( path_out_img = self.new_img_shot )
-        ScreenSelector( path_out_img = self.new_img_print )
         
-        #self.read = True
+        
+        ScreenSelector( parent       = self , 
+                        path_out_img = self.new_img_print, 
+                        on_finish    = self.readOpen 
+                       )
+        
 
-        thread = threading.Thread( target = self.readOpen )
-        thread.start()
+
+        #thread = threading.Thread( target = self.readOpen )
+        #thread.start()
 
         
 
