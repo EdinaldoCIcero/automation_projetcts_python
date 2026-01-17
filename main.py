@@ -128,7 +128,7 @@ button_to_print_maker_pdf.send_keys( Keys.ENTER )
 
 
 
-notification_end = Notification(
+notif_end = Notification(
                     app_id      = "MTG Automation",
                     title       = "Processo finalizado 🎉",
                     msg         = "O PDF das cartas foi gerado com sucesso!",
@@ -136,11 +136,9 @@ notification_end = Notification(
                     )
 
 
-time.sleep( 6 )
-notification_end.set_audio( audio.Default , loop = False )
-notification_end.show()
+time.sleep( 7 )
+notif_end.set_audio( audio.Default , loop = False )
+notif_end.show()
 
-
-input("Pressione ENTER para fechar o programa ok :) ...")
-
+#input("Pressione ENTER para fechar o programa ok :) ...")
 driver.quit()
