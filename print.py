@@ -9,16 +9,17 @@ import numpy as np
 import os
 import time
 
+
 #------------------------------------------------------
 from libs.openCVReadImagens import OpenCVRead
 
 
-#----------------------------------------------------
 
+#----------------------------------------------------
 class ScreenSelector:
     def __init__(self, parent, path_out_img, on_finish ):
-        self.on_finish = on_finish
-        self.path_out_img = path_out_img
+        self.on_finish      = on_finish
+        self.path_out_img   = path_out_img
 
         self.root = tk.Toplevel(parent)
         self.root.attributes("-fullscreen", True)
@@ -31,15 +32,16 @@ class ScreenSelector:
 
         self.start_x = None
         self.start_y = None
-        self.rect   = None
+        self.rect    = None
 
+        # aplicando as funçãos draws e drags
         self.canvas.bind("<ButtonPress-1>", self.on_mouse_down)
         self.canvas.bind("<B1-Motion>", self.on_mouse_drag)
         self.canvas.bind("<ButtonRelease-1>", self.on_mouse_up)
-        
+
+
 
     #-----------------------------------
-
     def on_mouse_down(self, event):
         self.start_x , self.start_y = event.x , event.y
 
@@ -49,41 +51,31 @@ class ScreenSelector:
                                                     width   = 2
                                                 )
 
+
     #-----------------------------------
     def on_mouse_drag(self, event):
         self.canvas.coords( self.rect, self.start_x, self.start_y, event.x, event.y )
         
 
+
     #----- função responsavel por fazer o prin e salvar 
     def on_mouse_up( self , event  ):
-        #rand_name_out = randint( 0 , 10000 )
-
-        #path_out_img = "imgs/prints_screen/"
-        #out_name_img = path_out_img + "area_shot_" + str( rand_name_out ) + ".png"
-    
         end_x = event.x
         end_y = event.y
 
         #----------------------------------------------------------------------
-
         x1 = min( self.start_x , end_x )
         y1 = min( self.start_y , end_y )
         x2 = max( self.start_x , end_x )
         y2 = max( self.start_y , end_y )
 
-        #self.root .destroy() # fechar o TK
-        self.root.destroy()
+        self.root.destroy() # fechar o TK
 
-    # 🔥 AVISA QUE TERMINOU
-    
         # usando o pillow para criar a imagem do screenshot, sómente em windows
         screenshot = ImageGrab.grab( bbox = ( x1, y1, x2, y2 ) )
         screenshot.save( self.path_out_img )
 
-        
         self.on_finish()
-
-        print("Área salva com sucesso!")
 
 
 
@@ -106,22 +98,27 @@ class AppScreenShot( customtkinter.CTk ):
         self.new_img_shot   = ""
         self.new_img_print  = "" 
 
+        #-------------------------------
+        # IDEIA DE BANCO DE DADOS PARA PYAUTOGUI....
+        self.data_save_process_locs_values = {
+            "NAME_PROCESS"   : self.new_user_folder,
+            "STEPS_VALUES"   : [
+                                [ "CENTER_INT_POS_X" , "CENTER_INT_POS_Y" , "STR( TYPE_ACTION = (CLICK , KEY , WRITE_TEXT ) )" ],
+                                [ "CENTER_INT_POS_X" , "CENTER_INT_POS_Y" , "STR( TYPE_ACTION = (CLICK , KEY , WRITE_TEXT ) )" ],
 
-
+                                ]
+        }
 
 
     #-----------------------------------------------
     def setImgName( self , rand_name_out , name_img = "screen_shot_" , extetion_type = ".png"  ):
-
         out_img_rand_name_end = self.path_out_img + name_img + str( rand_name_out ) + extetion_type
-
         return out_img_rand_name_end
     
 
     #-----------------------------------------------
     def buttonPrint(self):
         rand_name_out = randint( 0 , 10000 )
-        
         self.count_print_numb += 1
         #-------------------------------------------------------------------------------------------
 
@@ -147,11 +144,6 @@ class AppScreenShot( customtkinter.CTk ):
         
 
 
-        #thread = threading.Thread( target = self.readOpen )
-        #thread.start()
-
-        
-
     #-----------------------------------------------
     def screenShotComplete( self  , path_out_img ):
         
@@ -170,13 +162,10 @@ class AppScreenShot( customtkinter.CTk ):
 
     #-----------------------------------------------
     def readOpen(self):
+        new_read_img = OpenCVRead( path_img_fullscreen              = self.new_img_shot  , 
+                                   path_area_img_element_reference  = self.new_img_print 
+                                   )
         
-        #if self.read == True:
-        #time.sleep( 2 )
-        new_read_img = OpenCVRead( path_img_fullscreen = self.new_img_shot  , path_area_img_element_reference = self.new_img_print )
-            #self.read = False
-
-
         pass
         
 
@@ -184,4 +173,3 @@ class AppScreenShot( customtkinter.CTk ):
 #-----------------------------------------------------
 app = AppScreenShot()
 app.mainloop()
-#app.update()

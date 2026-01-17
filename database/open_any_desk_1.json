@@ -1,0 +1,23 @@
+{
+  "name": "open_any_desk_1",
+  "created_at": "2026-01-17",
+  "steps": [
+    {
+      "id": 1,
+      "action": "click",
+      "template": "templates/login_button.png",
+      "confidence": 0.85,
+      "timeout": 10
+    },
+    {
+      "id": 2,
+      "action": "write",
+      "text": "admin"
+    },
+    {
+      "id": 3,
+      "action": "press",
+      "key": "enter"
+    }
+  ]
+}
