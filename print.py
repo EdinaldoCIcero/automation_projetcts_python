@@ -166,6 +166,11 @@ class AppScreenShot( customtkinter.CTk ):
                                    path_area_img_element_reference  = self.new_img_print 
                                    )
         
+        centers , max_values = new_read_img.positionsValuesElement( )
+
+        print( "--> Center : " , centers , "---> Location : ", max_values )
+        
+        
         pass
         
 

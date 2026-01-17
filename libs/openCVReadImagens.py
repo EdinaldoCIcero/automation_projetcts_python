@@ -41,6 +41,14 @@ class OpenCVRead():
         self.center_y = self.top_left[1] + self.h // 2
 
 
-        print("Centro:", self.center_x, self.center_y)
-        print("Localizações:", self.max_val , self.max_loc )
+      
 
+    def positionsValuesElement( self ):
+
+        #print("Centro:", self.center_x, self.center_y)
+        #print("Localizações:", self.max_val , self.max_loc )
+        centers     = [ self.center_x, self.center_y ]
+        max_values  = [ self.max_val , self.max_loc ] 
+        
+        return centers , max_values
+     
