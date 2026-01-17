@@ -95,8 +95,8 @@ class AppScreenShot( customtkinter.CTk ):
         self.button_print = customtkinter.CTkButton(self, text = "Shot" , command =  self.button_callbck )
         self.button_print.pack(padx=20, pady=20)
         
-        self.new_user_folder  = "open_any_desk_3/"
-        self.path_out_img     = "database/prints_screen/" + self.new_user_folder 
+        self.new_user_folder  = "open_any_desk_1"
+        self.path_out_img     = "database/prints_screen/" + self.new_user_folder + "/"
         self.count_print_numb = 0
         
     #-----------------------------------------------
@@ -125,12 +125,12 @@ class AppScreenShot( customtkinter.CTk ):
         
 
         self.screenShotComplete( path_out_img = self.setImgName( rand_name_out  = str( self.count_print_numb ) ,  
-                                                                 name_img       = "screen_shot_" 
+                                                                 name_img       = self.new_user_folder + "_shot_" 
                                                                  ) )
         
         
         ScreenSelector( path_out_img = self.setImgName( rand_name_out = str( self.count_print_numb ) , 
-                                                         name_img = "print_area_shot_" ) )
+                                                         name_img = self.new_user_folder + "_print_" ) )
         
         
         print(f"Pasta '{ self.new_user_folder }' criada com sucesso!")
