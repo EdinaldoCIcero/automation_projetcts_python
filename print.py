@@ -1,14 +1,16 @@
 import tkinter as tk
+import threading
+import customtkinter
 from PIL import ImageGrab
 from random import randint
 import mss
 import cv2
 import numpy as np
-import customtkinter
 import os
+import time
 
-
-#----------------------------------------------------
+#------------------------------------------------------
+from libs.openCVReadImagens import OpenCVRead
 
 
 
@@ -92,13 +94,18 @@ class AppScreenShot( customtkinter.CTk ):
         self.geometry("200x150")
 
 
-        self.button_print = customtkinter.CTkButton(self, text = "Shot" , command =  self.button_callbck )
+        self.button_print = customtkinter.CTkButton(self, text = "Shot" , command =  self.buttonPrint )
         self.button_print.pack(padx=20, pady=20)
         
+        self.path_database    = "database/"
         self.new_user_folder  = "open_any_desk_1"
         self.path_out_img     = "database/prints_screen/" + self.new_user_folder + "/"
         self.count_print_numb = 0
         
+        self.read           = False
+        self.new_img_shot   = ""
+        self.new_img_print  = ""
+
     #-----------------------------------------------
     def setImgName( self , rand_name_out , name_img = "screen_shot_" , extetion_type = ".png"  ):
 
@@ -108,7 +115,7 @@ class AppScreenShot( customtkinter.CTk ):
     
 
     #-----------------------------------------------
-    def button_callbck(self):
+    def buttonPrint(self):
         rand_name_out = randint( 0 , 10000 )
         
         self.count_print_numb += 1
@@ -123,39 +130,49 @@ class AppScreenShot( customtkinter.CTk ):
             print(f"Caminho '{self.path_out_img}' criado com sucesso (ou já existia).")
         
         
+        self.new_img_shot  = self.setImgName( rand_name_out  = str( self.count_print_numb ) ,  name_img       = self.new_user_folder + "_shot_" )
+        self.new_img_print = self.setImgName( rand_name_out = str( self.count_print_numb ) , name_img = self.new_user_folder + "_print_" )
+        
+        self.screenShotComplete( path_out_img = self.new_img_shot )
+        ScreenSelector( path_out_img = self.new_img_print )
+        
+        #self.read = True
 
-        self.screenShotComplete( path_out_img = self.setImgName( rand_name_out  = str( self.count_print_numb ) ,  
-                                                                 name_img       = self.new_user_folder + "_shot_" 
-                                                                 ) )
-        
-        
-        ScreenSelector( path_out_img = self.setImgName( rand_name_out = str( self.count_print_numb ) , 
-                                                         name_img = self.new_user_folder + "_print_" ) )
-        
-        
-        print(f"Pasta '{ self.new_user_folder }' criada com sucesso!")
+        thread = threading.Thread( target = self.readOpen )
+        thread.start()
+
         
 
-        pass
-    
-
-
-     #-----------------------------------------------
+    #-----------------------------------------------
     def screenShotComplete( self  , path_out_img ):
         
         #-------------------------------------------------
         with mss.mss() as sct:
             monitor_screen      = sct.monitors[1]
             print_screen_img    = sct.grab( monitor_screen  )
-
-            screen_frame = np.array( print_screen_img )
+            screen_frame        = np.array( print_screen_img )
             cv2.imwrite( path_out_img , screen_frame )
 
         print("Screenshot feita com sucesso e salva em " , path_out_img )
         
         pass
 
+    
+
+    #-----------------------------------------------
+    def readOpen(self):
+        
+        #if self.read == True:
+        #time.sleep( 2 )
+        new_read_img = OpenCVRead( path_img_fullscreen = self.new_img_shot  , path_area_img_element_reference = self.new_img_print )
+            #self.read = False
+
+
+        pass
+        
+
 
 #-----------------------------------------------------
 app = AppScreenShot()
 app.mainloop()
+#app.update()
